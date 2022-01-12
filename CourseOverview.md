@@ -25,3 +25,92 @@
 * Students will be tasked with performing DCI-specific duties in different real-world scenarios and so may not always be given a complete picture at the start of the exercise
 * Each exercise will be followed by an instructor debrief to further emphasize processes and methodologies that students can implement in their roles
 * Exercises can be repeated up to 10 times to allow students to further refine their capabilities
+
+## Exercise 2.3-06: Forensically Wipe Media for Deployment/Use
+
+* dc3dd command  
+  * dc3dd wipe=/dev/sdc tpat="Media wiped on 20220106 by James Honeycutt"  
+  * xxd -l 512 /dev/sdc
+  * dc3dd wipe=/dev/sdc pat=12345678
+  * xxd -l 1 -s 45983 /dev/sdc  
+
+* Format Disk
+  * fdisk /dev/sdc
+    * n -> 1 -> 1024 -> +4.3G -> w  
+  * mkfs -t ext4 /dev/sdc  
+
+## Exercise 2.3-07: Configure and Test GRR Rapid Response for Deployment/Use  
+
+* Fix Client Agents
+  * On the GRR Server edit the `/etc/grr/server.local.yaml`  
+  * run `sudo grr_config_updater repack_clients`  
+
+## Exercise 2.3-08: Create Filesystem Artifact IOCs for GRR
+
+* File Command used to find artifacts
+  * `%%environ_systemdrive\**10{FileNames}{Extentions}`
+
+## Exercise 2.3-09: Create Memory and Registry Artifact IOCs for GRR
+
+* [GRR Link](https://grr-doc.readthedocs.io/en/latest/)
+* [ReKall Link](https://rekall.readthedocs.io/en/latest/plugins.html)
+* [ReKall Plugins](http://www.rekall-forensic.com/documentation-1/rekall-documentation/plugins)
+* Registry Command used to find artifacts  
+  * AnalyzeClientMemory -> `pslist` for Process Lists
+  * AnalyzeClientMemory -> `Users` to enumerate users
+* Find muntants with Handle64
+  * `.\handle64.exe -a | findstr Mutant`
+
+## Exercise 2.3-10: Install Security Onion and Test Configuration
+
+* [Security Onion Install](https://github.com/Security-Onion-Solutions/security-onion/wiki/Installation)  
+* [Security Onion Cheatsheet](https://github.com/Security-Onion-Solutions/security-onion/wiki/Cheat-Sheet)  
+* [Security Onion Produciton Deployment](https://github.com/Security-Onion-Solutions/security-onion/wiki/ProductionDeployment)  
+* [Security Onion Post Depoyment](https://github.com/Security-Onion-Solutions/security-onion/wiki/PostInstallation)  
+
+## Exercise 2.3-11: Use Bro to Carve Data
+
+* [Zeek Logging](https://docs.zeek.org/en/master/log-formats.html)
+* Default Zeek PCAP location:
+  * /opt/samples/markofu
+* TCPReplay Eample
+  * 'sudo tcpreplay -i eth1 <path to PCAP> -t'
+* Bro-cut example
+  * `cat /nsm/bro/logs/current/files.log | bro-cut -d ts fuid tx_host rx_host filename mime_type md5`  
+
+## Exercise 2.3-12: Create Network Traffic IOCs for Snort  
+
+* [Zeek Log Format](https://docs.zeek.org/en/master/log-formats.html)  
+* [WireShark Documentation](https://www.wireshark.org/docs/)  
+* [Snort Documentation](https://snort.org/documents)  
+* [TCPReplay Documentation](https://linux.die.net/man/1/tcpreplay)  
+* Edit the Snort config file to read `local.rules`etc  
+  * `vim /etc/nsm/so-sensor-eth1/snort.conf`  
+  * uncomment `local.rules` under #7  
+* Now I can add my custom rules to `local.rules`  
+  * `/etc/nsm/rules/local.rules`  
+* Then test the rules  
+  * `sudo snort -T -i eth1 -c /etc/nsm/so-sensor-eth1/snort.conf`  
+* Use this command to monitor Snort  
+  * `snort -d -l /var/log/snort/ -h 10.0.0.0/24 -A console -c /etc/snort/snort.conf`  
+
+## VIM Shortcuts  
+
+* Search and replace
+  * `:s/search/replace` - first occurence in each line  
+  * `:s/search/replace/g` - All occurences on each line  
+* Add a string to the end of the line
+  * `:%norm A*`  
+    * % = For Every Line  
+    * norm = type the following commands  
+    * A = Append "*" to the End of the line  
+* Visual Block editing
+  * `ESC` to enter "command mode"  
+  * Use `Ctrl+V` to enter visual block mode
+  * Move `Up/Down` to select the columns of text in the lines you want to comment.
+  * Then hit `Shift+i` and type the text you want to insert.
+  * Then hit `Esc`, wait 1 second and the inserted text will appear on every line.  
+* Moving within a file
+  * $ = End of line  
+  * 0 = Begining of line  
+  
