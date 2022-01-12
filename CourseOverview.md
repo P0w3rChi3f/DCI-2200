@@ -87,6 +87,7 @@
 * Edit the Snort config file to read `local.rules`etc  
   * `vim /etc/nsm/so-sensor-eth1/snort.conf`  
   * uncomment `local.rules` under #7  
+  * also change 'TCP Checksum Mode' from All to None
 * Now I can add my custom rules to `local.rules`  
   * `/etc/nsm/rules/local.rules`  
 * Then test the rules  
@@ -100,10 +101,16 @@
   * `:s/search/replace` - first occurence in each line  
   * `:s/search/replace/g` - All occurences on each line  
 * Add a string to the end of the line
-  * `:%norm A*`  
+  * `:%norm A*` - Regular Text
     * % = For Every Line  
     * norm = type the following commands  
     * A = Append "*" to the End of the line  
+  * `%s/$/\=line('.')` - Number sequences  
+    * % = apply to entire buffer
+    * s = substitute
+    * /$ = search for end of line
+    * /\=line('.')-1 = replace with linenumber - 1
+
 * Visual Block editing
   * `ESC` to enter "command mode"  
   * Use `Ctrl+V` to enter visual block mode
@@ -113,4 +120,43 @@
 * Moving within a file
   * $ = End of line  
   * 0 = Begining of line  
-  
+
+
+## Walkthrough 
+
+sudo vim iocips.txt
+sodo vim iocdomains.txt
+enter visual block mode (ctrl-V)
+shift i
+alert ip andy any -> any (msg: "Bad domain found)
+enter visual block mode (ctrl-V)
+end key
+A
+convert dots to multiple content feilds
+`%s/\./"; content:"/g`
+
+
+sudo rule-update
+
+## Exercise 2.3-13: Use PowerShell to Collect Data  
+
+* Pingsweep
+  * 1..255 | foreach {test-connection -count 1 10.10.10.$_}
+  * start-service winrm
+  * set-item wsman:\localhost\client\trustedhosts 10.10.10.40
+  * enter-pssession 10.10.10.40
+* Registry Runkeys
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce 
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce
+* Search for scheduled tasks
+  * `Get-ScheduledTask * -taskpath \* | select-object TaskName -ExpandProperty Actions | Where-object -like "*start.bat*"`  
+* Get the disk information using get-wmiobject
+  * `Get-WmiObject -class Win32_LogicalDisk`  
+  * `Get-CimInstance -ClassName Win32_LogicalDisk`  
+* Get a list of network connection
+  * `Get-NetTCPConnection`  
+* Look for missconfigurations
+  * `Get-EventLog -Newest 100 -Logname System -InstanceID 414 | Select-Object -ExpandProperty Message | Group-object | Select-Object -ExpandProperty Group`  
+  * `Get-WinEvent -LogName System | Where-Object {$_.id -eq "414"}`  
