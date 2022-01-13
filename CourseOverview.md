@@ -141,10 +141,10 @@ sudo rule-update
 ## Exercise 2.3-13: Use PowerShell to Collect Data  
 
 * Pingsweep
-  * 1..255 | foreach {test-connection -count 1 10.10.10.$_}
-  * start-service winrm
-  * set-item wsman:\localhost\client\trustedhosts 10.10.10.40
-  * enter-pssession 10.10.10.40
+  * `1..255 | foreach {test-connection -count 1 10.10.10.$_}`
+  * `start-service winrm`
+  * `set-item wsman:\localhost\client\trustedhosts 10.10.10.40`
+  * `enter-pssession 10.10.10.40`
 * Registry Runkeys
   * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
   * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce 
@@ -160,3 +160,7 @@ sudo rule-update
 * Look for missconfigurations
   * `Get-EventLog -Newest 100 -Logname System -InstanceID 414 | Select-Object -ExpandProperty Message | Group-object | Select-Object -ExpandProperty Group`  
   * `Get-WinEvent -LogName System | Where-Object {$_.id -eq "414"}`  
+*Allow RDP Connections  
+  * `Set-ItemProperty -Path ‘HKLM:System\CurrentControlSet\Control\Terminal Server’ -Name “fDenyTSConnections” -Value 0`  
+
+## Module II Review  
