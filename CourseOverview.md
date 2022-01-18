@@ -121,8 +121,7 @@
   * $ = End of line  
   * 0 = Begining of line  
 
-
-## Walkthrough 
+## Walkthrough  
 
 sudo vim iocips.txt
 sodo vim iocdomains.txt
@@ -133,11 +132,17 @@ enter visual block mode (ctrl-V)
 end key
 A
 convert dots to multiple content feilds
-`%s/\./"; content:"/g`
+`:%s/\./"; content:"/g`
 
+Set the SID number
+`:let @a=1001000 | %s/ReplaceMe/\=''.(@a+setreg('a',@a+1))/g`
 
+Test the rules
+  `snort -T -c /etc/nsm/rules/local.rules`
 sudo rule-update
 
+TCP Replay
+`sudo tcpreplay -T -i eth1`
 ## Exercise 2.3-13: Use PowerShell to Collect Data  
 
 * Pingsweep
@@ -148,8 +153,8 @@ sudo rule-update
 * Registry Runkeys
   * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
   * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce 
-  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
-  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce
+  * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
+  * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce
 * Search for scheduled tasks
   * `Get-ScheduledTask * -taskpath \* | select-object TaskName -ExpandProperty Actions | Where-object -like "*start.bat*"`  
 * Get the disk information using get-wmiobject
