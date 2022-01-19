@@ -76,21 +76,25 @@
     For starters, we have a 2-hour window where we can take down the network.  I would try to convert the IDS to an IPS/IDS and move it inline between the firewall and .10 switch if it could handle the throughput. Based on the intel dump, I would say we are getting 2 new senors.  I would place one on a span port connected to 10.57.0.3 and the other one at 10.57.5.2.
   ```  
 
-* Scenario 3  
+* Scenario 3 - [Critical Asset Map](images\Mod3\E3-1-04\CriticalAssetMap.pdf)  
   * Q1 - Using the map and based on the COA 1 in the attack diagram provided by the CTE squad, what is the best sensor placement position, if your team only has two network sensors? Why?
 
   ```notes
-
+    I would place one on a span port on 10.0.1.2 and 10.6.0.1.  Both of those locations will give me visibility of the critical systems.
   ```
 
   * Q2 - Using the same resources, what is the best sensor placement position if your team only has one network sensor? Why?  
 
   ```notes
-
+    If you have the port density, I would place it at the firewall and span one of its ports.  If that is not a possibility, it would be a span off of 10.0.1.4.  Both places get me closer to the egress point to monitor for data exfil.
   ```
 
   * Q3 - Using the same resources, what is the best sensor placement position, if your team only has one network sensor and two host sensors? Why?
 
   ```notes
+    Network Sensor
+    If you have the port density, I would place it at the firewall and span one of its ports.  If that is not a possibility, it would be a span off of 10.0.1.4.  Both places get me closer to the egress point to monitor for data exfil.
 
+    Hosts:
+    I would probably put a host sensor on the mail server.  That is one of the targets for APT1.  I would monitor for the malicious email addresses associated with APT1.  The next host would be File Server 10.2.3.131.  This is based on the assumption that this is where the sensitive documents are stored.  I would start monitoring file access.
   ```
