@@ -22,7 +22,7 @@
 
 ## Exercise 3.1-04: Develop Sensor Strategy - Place New Sensors and Reuse Local Resources  
 
-![Network Map](.\images\Mod3\E3-1-04\NetWorkMap-S1-S2.png)
+![Network Map](images\Mod3\E3-1-04\NetWorkMap-S1-S2.png)
 
 * Scenario 1
   * Q1 - Tapping any router will cause a network outage, so this cannot be done per the supported commander.  Using the IDS to do capture full PCAP is a better choice.  It is already in the network and detecting things already.  The risk of using the IDS is that it may be compromised already.
