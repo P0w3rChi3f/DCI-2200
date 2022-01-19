@@ -142,7 +142,8 @@ Test the rules
 sudo rule-update
 
 TCP Replay
-`sudo tcpreplay -T -i eth1`
+`sudo tcpreplay -T -i eth1`  
+
 ## Exercise 2.3-13: Use PowerShell to Collect Data  
 
 * Pingsweep
@@ -169,3 +170,6 @@ TCP Replay
   * `Set-ItemProperty -Path ‘HKLM:System\CurrentControlSet\Control\Terminal Server’ -Name “fDenyTSConnections” -Value 0`  
 
 ## Module II Review  
+
+* Parsing pcap with IOC files
+`tcpdump -nnvXS -r /path/to/PCAP | grep -nof /Path/to/file`  
