@@ -80,7 +80,7 @@
   * Q1 - Using the map and based on the COA 1 in the attack diagram provided by the CTE squad, what is the best sensor placement position, if your team only has two network sensors? Why?
 
   ```notes
-    I would place one on a span port on 10.0.1.2 and 10.6.0.1.  Both of those locations will give me visibility of the critical systems.
+    I would place one on a span port on 10.0.1.4 and 10.6.0.2.  Both of those locations will give me visibility of the critical systems.
   ```
 
   * Q2 - Using the same resources, what is the best sensor placement position if your team only has one network sensor? Why?  
