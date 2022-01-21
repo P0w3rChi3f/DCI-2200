@@ -98,3 +98,40 @@
     Hosts:
     I would probably put a host sensor on the mail server.  That is one of the targets for APT1.  I would monitor for the malicious email addresses associated with APT1.  The next host would be File Server 10.2.3.131.  This is based on the assumption that this is where the sensitive documents are stored.  I would start monitoring file access.
   ```
+
+## Exercise 3.1-05: Receive and Process Baseline System  
+
+* [Volatility](https://github.com/volatilityfoundation/volatility/wiki/Command-Reference)  
+* [FTK Imager](https://learn.dcita.edu/resume_course/305624)  
+* [Sysinternals Handle](https://docs.microsoft.com/en-us/sysinternals/downloads/handle)  
+
+* Steps to verifie if a file has been modified.
+  * Using FTK Imager, browse to the each file and `export file hash`
+  * Using PowerShell use the command `Get-FileHash -Algorithm <MD5 or SHA1> <c:/Path/to/file.exe>`
+  * Do a manual comparison.  This is the quickest way since we only have to look at 4 applicaions.  Real world we would have exported a full file hash list from FTK and obained a file hash list with PowerShell then did a comparison.
+
+* Steps to see if any new userser were added.
+  * I first looked at the Users folder in FTK Imager
+  * I then ran `Get-LocalUser` and compaired that list with what I saw in FTK imager.
+
+* Steps to get Compair Registries.
+  * Using FTKImager export the NTUSER.DAT from DCI Student
+  * Mount the NTUSER.DAT file with Regview then browse to the various run keys
+  * Using PowerShell you can use `get-itemproperty` to get the run key values from the local machine.
+  * From there just do a manual comparison.  
+
+* Steps to get Volatility profile on the image. [SANS Cheatsheet] (images\Mod3\E3-1-05\MemoryForensicsCheatSheet.pdf)  
+  * Start off by running `.\volatility.exe -f E:\memdump.mem imageinfo`
+    * Answer was: Win10x64_14393
+* Steps to get the baseline processes
+  * run `.\volatility.exe -f E:\memdump.mem --profile=Win10x64_14393 pslist`
+
+* Steps to get the munatant handle for av64 process
+  * run `handle64 -a -p av64 | findstr Mutant`
+  * or `handle64 -a -p av64 | select-string "Mutant"`
+
+* Steps to get listening UDP Ports
+  * `Get-NetUDPEndpoint | select LocalAddress, LocalPort, OwningProcess` and `get-NetUDPEndpoint | Foreach-object {get-process -id $_.OwningProcess}` gave me a list of UDP Ports and the process that owns them
+  * `.\volatility.exe -f E:\memdump.mem --profile=Win10x64_14393 netscan` gave me a list of Baseline UDP connections  
+
+* I used process Explorer to get the file paths of the malicious processes.
