@@ -152,3 +152,13 @@
 
 * Command to scan a full subnet and OS
   * `nmap -O 192.168.13.0/24`
+
+## Exercise 3.2-07: Develop Rudimentary Ping Scan  
+
+* [Ping Sweep with PowerShell](https://petri.com/building-ping-sweep-tool-powershell)
+* [Port Checker with PowerShell](https://petri.com/building-a-powershell-ping-sweep-tool-adding-a-port-check)
+* [Ping Sweep with Command Line](https://en.wikiversity.org/wiki/Computer_Networks/Ping/Sweep)
+* [PowerShell Scripting Cookbook](https://web.archive.org/web/20190220192836/https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-5.1)
+* [Writing Scripts with PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/ise/how-to-write-and-run-scripts-in-the-windows-powershell-ise?view=powershell-5.1)
+* [Writing Batch Scripts](https://www.howtogeek.com/263177/how-to-write-a-batch-script-on-windows/)
+* [Command Line Reference](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-xp/bb490890(v=technet.10)?redirectedfrom=MSDN)
