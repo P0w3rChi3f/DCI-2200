@@ -135,3 +135,20 @@
   * `.\volatility.exe -f E:\memdump.mem --profile=Win10x64_14393 netscan` gave me a list of Baseline UDP connections  
 
 * I used process Explorer to get the file paths of the malicious processes.
+
+## Exercise 3.2-06 Perform Nmap Scan for Endpoint Identification
+
+* [Nmap Documentation](https://highon.coffee/blog/nmap-cheat-sheet/)
+* [Nmap Cheat Sheet](https://nmap.org/)  
+
+* Command to scan endpoint 192.168.13.17
+  * `nmap -Pn 192.168.13.17`  
+
+* Command to scan endpoint 192.168.13.17 and get OS
+  * `nmap -Pn -O 192.168.13.17`  
+
+* A command to scan endpoints 192.168.13.19 and 192.168.13.20.  
+  * `nmap -Pn -O 192.168.13.19 172.168.13.20`
+
+* Command to scan a full subnet and OS
+  * `nmap -O 192.168.13.0/24`
