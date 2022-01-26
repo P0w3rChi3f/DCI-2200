@@ -162,3 +162,98 @@
 * [Writing Scripts with PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/ise/how-to-write-and-run-scripts-in-the-windows-powershell-ise?view=powershell-5.1)
 * [Writing Batch Scripts](https://www.howtogeek.com/263177/how-to-write-a-batch-script-on-windows/)
 * [Command Line Reference](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-xp/bb490890(v=technet.10)?redirectedfrom=MSDN)
+
+## Exercise 3.2-08: Perform Traffic Analysis Using Wireshark
+
+* [WireShark Display Filters](https://wiki.wireshark.org/DisplayFilters)
+* [Wireshark User's Manual](https://www.wireshark.org/docs/wsug_html_chunked/)
+* [Symantec Security Response: Indicators of Compromise](https://learn.dcita.edu/system/dragonfly/production/asset_library/5d38fa054eae2a34f20452d73359e51c.pdf)
+
+* How to find Top Talkers
+  * Wireshark -> Statistics -> Conversations -> IPv4
+  * Sort by Packets
+  * 8.28.16.201
+
+* Purpose of host 8.28.16.201
+  * Filter Used: `ip.addr == 8.28.16.201 and http.request.method == GET`
+  * Most Get Requests had K9 as the User Agent.  K9 is a free webfiltering tool offered as a home use product from BlueCoat.
+
+* least active external/public IP address (not 204.79.197.254 and 211.149.241.70)
+  * Wireshark -> Statistics -> Conversations -> IPv4
+  * Sort by Packets
+  * 13.107.255.14
+
+* Huge spike in traffic
+  * Wireshark -> Statistics -> IO Graph
+  * 1359 = 496
+
+* Look for executables
+  * Wireshark -> File -> Export Objects -> HTTP (No Results)
+  * Filter for `frame contains "exe"`
+  * Found PCCleaner in some HTTP traffic
+  * Tracked it down to packet TCP Stream 255
+  * Actuall file was 150067.htm
+
+* Extract file
+  * Wireshark -> File -> Export Objects -> Http -> 150067.htm
+  * First verified that it was a binary `file 150067.htm`
+  * Then made sure there wasn't any extra html data 'xxd 150067.htm`
+  * Then got the MD5 checksum `md5sum 150067.htm` -> Last four `4965`
+  * On the second go around, I had to look for the url that the binary was downloaded from `download.fast-files.com`
+
+* Next stream called out to `fast-files.com`
+  * 8. smilecare.com ?????
+  * Analizing the UserAgent strings and filtering out the known good, we end up finding a user agent string of powershell. The first one was a one hit wonder the next one kept repeting.  I looked for the DNS Query that matched that traffic.
+* Does the identified domain name match a known IOC for this threat?
+  * 9. `Yes`
+* What is the IP address of the identified domain?
+  * 10. `66.77.206.85`
+* What is the interval of the beacon?
+  * 11. ????? I will figure it out.
+  * Once I was able to identify the Malicious IP I did a filter of `ip.dst 66.77.206.85`
+
+## Exercise 3.2-09: Analyze Obfuscated Traffic
+
+* [File Signatures](https://www.garykessler.net/library/file_sigs.html)
+* [User Agent Strings](https://www.sans.org/white-papers/33874/)
+* [Malware Obfuscation Approaches](https://blog.malwarebytes.com/threat-analysis/2013/03/obfuscation-malwares-best-friend/)  
+
+* Case Study 01
+  * Extract the file yikr9jXET.jpg
+    * Export object produced `JpgImageFromWireshark`
+
+  * Extract the PNG image file transferred over HTTP with an IP in the 68.85.0.0/16  
+    * `ipaddr == 10.10.0.0/16 and http`
+    * led me to packet 757822 and found `q9Xik-rTnw.bin`
+    * Exported it and ran `file q9Xik-rTnw.bin`
+    * Then renamed it `mv q9Xik-rTnw.bin q9Xik-rTnw.png`
+    * Ended up with `PngBy5ignature`
+
+  * Identify the downloaded executable masquerading as a `Windows update`  
+    * Started with `Frame Contains "Windows Update"`
+    * Then tried `Frame Contains "WindowsUpdate"`  
+    * Then tried `Frame Contains "Windows"`  
+    * Started making some headway with `Frame Contains "Update" and Http`
+    * Ended up finding `GET /msdownload/update` packet 771931
+    * Best query `frame contains "msu"`
+      * Answer was `Windows6.0-KB934307-x86.msu`
+
+* Case Study 02
+  * Analyze the traffic associated with the User Agent string "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.1288)"
+    * First Query `http.user_agent == "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.1288)"` - Attacker IP `72.184.13.16`
+    * Q1 Operating system is `Windows 10` SourceIP 172.16.128.169
+  * 2 uri has `Symantec`
+  * Q3 UID = `439EB29F`
+
+* Case Study 03
+  * I filterd out the known IP `172.16.128.169` and set the destination IP to the attacker `72.184.13.16`
+    * query looked like `(ip.dst == 72.184.13.16) && !(172.16.128.169)`
+    * Found stream 18343 and a urlencoded POST
+    * Followed the stream and copied out the encoded message
+    * Ran echo `<encoded message> | base64 -d` and received `getcmd=1&uid=B621A93F&=Win+10+(64-bit)&av=Symantec&nat=no&version=3.3`
+      * Q1 version 3.3
+  * Looking at the HTTP stream I found another base64 encoded string and decoded it.
+    * Respons was `rate 60#loader http://114.80.105.136`
+    * Q2 114.80.105.136
+  * Q3 No
+
