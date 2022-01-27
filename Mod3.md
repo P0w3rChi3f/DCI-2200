@@ -202,6 +202,8 @@
   * On the second go around, I had to look for the url that the binary was downloaded from `download.fast-files.com`
 
 * Next stream called out to `fast-files.com`
+  * Easy way was to run IOC list through pcap
+    * `tcpdump -nnvXS -r /path/to/PCAP | grep -nof /Path/to/file`
   * 8. smilecare.com ?????
   * Analizing the UserAgent strings and filtering out the known good, we end up finding a user agent string of powershell. The first one was a one hit wonder the next one kept repeting.  I looked for the DNS Query that matched that traffic.
 * Does the identified domain name match a known IOC for this threat?
@@ -250,10 +252,49 @@
     * query looked like `(ip.dst == 72.184.13.16) && !(172.16.128.169)`
     * Found stream 18343 and a urlencoded POST
     * Followed the stream and copied out the encoded message
-    * Ran echo `<encoded message> | base64 -d` and received `getcmd=1&uid=B621A93F&=Win+10+(64-bit)&av=Symantec&nat=no&version=3.3`
+    * Ran `echo <encoded message> | base64 -d` and received `getcmd=1&uid=B621A93F&=Win+10+(64-bit)&av=Symantec&nat=no&version=3.3`
       * Q1 version 3.3
   * Looking at the HTTP stream I found another base64 encoded string and decoded it.
     * Respons was `rate 60#loader http://114.80.105.136`
     * Q2 114.80.105.136
   * Q3 No
 
+## Exercise 3.3-12 Analyze a Host to Identify Threat  
+
+* [PowerShell_for_Responders-PowerShell_Cookbook](.\Documents\PowerShell_for_Responders-PowerShell_Cookbook.pdf)  
+* [Microsoft: Getting Started with Windows PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.2)  
+* [Microsoft: Windows PowerShell Programmer's Guide](https://docs.microsoft.com/en-us/powershell/scripting/developer/prog-guide/windows-powershell-programmer-s-guide?view=powershell-5.1)
+
+* Copy an item from remote machine
+  * `$Session1 = New-PSSession -ComputerName 172.167.12.3`
+  * `Copy-Item -Path '<localPath>' -Destination '<remotePath>' -FreomSession $Session1 -Recurse`
+
+* Get and compare remote file hashes with a know good list.
+  * Get a list of remote hashes
+    * `invoke-command -computer name 172.16.12.3 -command {get-filehash -Algorithm SHA256 c:\Windows\System32\*} | out-file ~\Desktop\RemoteFileHashes.txt`
+  * Compare the file with a know list from the previous step.
+    * Ended up doing a manual file comare.
+      * Excel2017.exe and extrac32.exe
+  
+## Exercise 3.3-13 Analyze Hosts to Determine IOC Presence
+
+* Started with an export of all the dns queries from wireshark
+  * `tshark -r myPcap.pcapng -Y "dns and upd.dstport == 53" >> MyPcapDomains.csv`
+  * From there I used Notepad ++ to do some data manipulation and took out all the MS domain which left me with 7 domain to check.
+    * Found the following domains: `deebeedesigns.ca, firebirdonline.com, thecrownsgolf.org`
+
+* Next I exported all the uri using same technique as above
+  * `tshark -r myPcap.pcapng -Y "http.request.method == GET and http.request.uri" >> MyPcapURIs.csv`
+  * From there I used Notepad ++ to do some data manipulation.  I removed the columns I didnt need. Then sorted Lexicographically and searched for the uris in the question.
+
+* For the registry questions I used PowerShell
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce 
+  * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
+  * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce
+
+* To find the executable for the malicious service
+  * I started by compairing the 3 services in the IOC list with what was running
+    * `get-service <service name>`
+  * Once I found a match, I ran `get-CimInstance Win32_Service | Where-Object {$_.name -like "*aec*"} | select Name, Status, PathName`
+    * `C:\Users\DCI Student\AppData\Roaming\Microsoft\wuaclt.exe`  
