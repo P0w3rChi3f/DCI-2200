@@ -265,6 +265,11 @@
 * [Microsoft: Getting Started with Windows PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.2)  
 * [Microsoft: Windows PowerShell Programmer's Guide](https://docs.microsoft.com/en-us/powershell/scripting/developer/prog-guide/windows-powershell-programmer-s-guide?view=powershell-5.1)
 
+* filefinder sysntax `c:\users\**10\extension.exe`
+
+* Use psexc to enable PSRemoting
+  * `psexec.exe \\172.16.12.3 -u dcistudent -password P@ssw0rd P@ssw0rd -s Powershell.exe`
+
 * Copy an item from remote machine
   * `$Session1 = New-PSSession -ComputerName 172.167.12.3`
   * `Copy-Item -Path '<localPath>' -Destination '<remotePath>' -FreomSession $Session1 -Recurse`
@@ -289,7 +294,7 @@
 
 * For the registry questions I used PowerShell
   * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
-  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce 
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce  
   * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
   * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce
 
@@ -297,4 +302,39 @@
   * I started by compairing the 3 services in the IOC list with what was running
     * `get-service <service name>`
   * Once I found a match, I ran `get-CimInstance Win32_Service | Where-Object {$_.name -like "*aec*"} | select Name, Status, PathName`
-    * `C:\Users\DCI Student\AppData\Roaming\Microsoft\wuaclt.exe`  
+    * `C:\Users\DCI Student\AppData\Roaming\Microsoft\wuaclt.exe`
+    * Also created a script [Get-maliciousService](https://github.com/P0w3rChi3f/Get-MaliciousServices)
+
+## Exercise 3.3-14: Analyze a Security Event Log
+
+* [Windows Logon Forensics](.\Documents\WindowsLogonForensics.pdf)
+
+* Get Catagory of first log
+  * `get-winevent -path <path\to\evtx\file> | select -first 5`
+* Get the time the log was cleared
+  * `get-winevent -path <path\to\evtx\file> | where {$_.id -eq "1102"}`
+* Count of event ID 4624
+  * `get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4624"} | measure`
+* Count of event ID 4779
+  * `get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4779"} | measure`
+* Earliest failed logon attempt
+  * `get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4625"} | select -Last 5`
+* Get Earliest failed logon attempt Logon Type
+  * "(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4625"} | select -Last 1 | Select-object -expand message).split("`n") | select-string -pattern "Logon Type:""
+* Analyzing Password reset
+  * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4724"}` shows a password change attempt was made
+  * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4738"}` shows a user account was changed.
+  * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4724"} | Select-object -expand message).split("n") | select-string -Pattern "Password Last Set:" -context 8,0`
+* Look for Privilege escalation
+  * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4672"}`
+  * There were no 4728 logs
+* Find the user that was elevated to Admin
+  * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4672"} | Select-object -expand message).split("n") | select-string -Pattern "Account Name:"` -gets a list of users who were elevated
+* Get event ID not related to user accounts or groups.
+  * 
+* Get file name for System integrity event ID  
+  * found other System Integrity event Id through Google
+  * Counted how many logs there were: `get-winevent -path <path\to\evtx\file> | measure` = 206
+  * Then counted how many begain with a 4: `get-winevent -path <path\to\evtx\file> | where {$_.id -like "4*"} | measure` = 203
+  * then looked at what the 3 logs were that didn't begin with 4: `get-winevent -path <path\to\evtx\file> | where {$_.id -notlike "4*"}` = 6281 and 1102
+  * Then looked at the 6281 logs: `(get-winevent -path <path\to\evtx\file> | select -first 1 | where {$_.id -eq "6281"} | Select-object -expand message)`
