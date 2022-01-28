@@ -311,6 +311,7 @@
 
 * Get Catagory of first log
   * `get-winevent -path <path\to\evtx\file> | select -first 5`
+  * `get-winevent -path <path\to\evtx\file> | where {$_.id -eq "1102"} | Select TaskDisplayName`
 * Get the time the log was cleared
   * `get-winevent -path <path\to\evtx\file> | where {$_.id -eq "1102"}`
 * Count of event ID 4624
@@ -327,6 +328,7 @@
   * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4724"} | Select-object -expand message).split("n") | select-string -Pattern "Password Last Set:" -context 8,0`
 * Look for Privilege escalation
   * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4672"}`
+  * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4732"}`
   * There were no 4728 logs
 * Find the user that was elevated to Admin
   * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4672"} | Select-object -expand message).split("n") | select-string -Pattern "Account Name:"` -gets a list of users who were elevated
@@ -338,3 +340,11 @@
   * Then counted how many begain with a 4: `get-winevent -path <path\to\evtx\file> | where {$_.id -like "4*"} | measure` = 203
   * then looked at what the 3 logs were that didn't begin with 4: `get-winevent -path <path\to\evtx\file> | where {$_.id -notlike "4*"}` = 6281 and 1102
   * Then looked at the 6281 logs: `(get-winevent -path <path\to\evtx\file> | select -first 1 | where {$_.id -eq "6281"} | Select-object -expand message)`
+
+## Exercise 3.3-15: Characterize a Suspicious File
+
+* [Malwarebytes Windows Portable Executable (PE) Analysis Tools](https://blog.malwarebytes.com/threat-analysis/2014/05/five-pe-analysis-tools-worth-looking-at/)
+* [Structure of a Portable Executable (Graphic)](https://upload.wikimedia.org/wikipedia/commons/0/09/Portable_Executable_32_bit_Structure.png)
+* [Structure of a Portable Executable](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format?redirectedfrom=MSDN)
+
+* 
