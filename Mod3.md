@@ -347,4 +347,32 @@
 * [Structure of a Portable Executable (Graphic)](https://upload.wikimedia.org/wikipedia/commons/0/09/Portable_Executable_32_bit_Structure.png)
 * [Structure of a Portable Executable](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format?redirectedfrom=MSDN)
 
-* 
+## Exercise 3.3-16: Become Familiar with Executable Static Analysis  
+
+* [Kris Kendall's presentation on Practical Malware Analysis](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fwww.blackhat.com%2Fpresentations%2Fbh-dc-07%2FKendall_McMillan%2FPaper%2Fbh-dc-07-Kendall_McMillan-WP.pdf&clen=1047569&chunk=true)  
+* [Structure of a Portable Executable (Graphic)](https://upload.wikimedia.org/wikipedia/commons/0/09/Portable_Executable_32_bit_Structure.png)  
+* [Structure of a Portable Executable](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format?redirectedfrom=MSDN)  
+* [Malwarefox.com: Classes/types of Malware](https://www.malwarefox.com/malware-types/)
+* [Malwarebytes: Explained: Packer, Crypter, and Protector](https://blog.malwarebytes.com/cybercrime/malware/2017/03/explained-packer-crypter-and-protector/)  
+
+## Mod 3 Review
+
+1. NetMap - What are the subnets
+2. Define the Choke points
+3. Find 2nd Choke point
+4. Find 3rd Choke point
+5. COA 1 - Best placement for Net Sensor
+6. COA 2 - Best placement for Net Sensor
+7. COA 3 - Best placement for Net Sensor
+8. Baseline image - get MD5 Hash (FTK)
+9. BaseLine - get MD5 Hash (FTK)
+10. Baseline size of file
+11. Baseline Last modify date
+12. Identify WS not on the Map
+13. Domains that are know IOC's
+14. Open ports that did not match baseline
+15. Banner Grab - What service was enumerated
+16. Dat bat file that ws not part of baseline
+17. Which process not part of baseline
+18. Which service not part of baseline
+19. Which file is know IoC?

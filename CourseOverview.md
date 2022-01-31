@@ -153,7 +153,7 @@ TCP Replay
   * `enter-pssession 10.10.10.40`
 * Registry Runkeys
   * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
-  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce 
+  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce  
   * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
   * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce
 * Search for scheduled tasks
