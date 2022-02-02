@@ -370,9 +370,26 @@
 11. Baseline Last modify date
 12. Identify WS not on the Map
 13. Domains that are know IOC's
-14. Open ports that did not match baseline
+14. Open ports that did not match baseline  
+
+    * `$openTCPPorts = Invoke-command -compter (get-content computers.txt) -command {get-nettcpconnection}`  
+    * `$openUDPPorts = Invoke-command -compter (get-content computers.txt) -command {Get-NetUDPEndpoint}`
+    * `$openTCPPorts.localport | group | sort count`
+    * `$openUDPPorts.localport | group | sort count`  
+
 15. Banner Grab - What service was enumerated
 16. Dat bat file that ws not part of baseline
 17. Which process not part of baseline
 18. Which service not part of baseline
 19. Which file is know IoC?
+
+## Exercise 3.3-17 Characterize Binaries
+
+[Mandiant: Practical Malware Analysis by Kris Kendall](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fwww.blackhat.com%2Fpresentations%2Fbh-dc-07%2FKendall_McMillan%2FPaper%2Fbh-dc-07-Kendall_McMillan-WP.pdf&clen=1047569&chunk=true)
+[Structure of a Portable Executable (Graphic)](https://upload.wikimedia.org/wikipedia/commons/0/09/Portable_Executable_32_bit_Structure.png)
+[Structure of a Portable Executable](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format?redirectedfrom=MSDN)
+[Malwarefox.com: Classes/types of Malware](https://www.malwarefox.com/malware-types/)
+
+## Exercise 3.3-18: Coaxing Network IOCs
+
+[FakeNet-NG - Next Generation Dynamic Network Analysis Tool](https://github.com/mandiant/flare-fakenet-ng)
