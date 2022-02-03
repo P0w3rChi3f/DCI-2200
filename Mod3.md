@@ -293,10 +293,10 @@
   * From there I used Notepad ++ to do some data manipulation.  I removed the columns I didnt need. Then sorted Lexicographically and searched for the uris in the question.
 
 * For the registry questions I used PowerShell
-  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
-  * Get-ItemPropery HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce  
-  * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
-  * Get-ItemPropery HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce
+  * Get-Item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+  * Get-Item HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce  
+  * Get-Item HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
+  * Get-Item HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce
 
 * To find the executable for the malicious service
   * I started by compairing the 3 services in the IOC list with what was running
