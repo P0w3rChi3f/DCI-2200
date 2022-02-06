@@ -28,7 +28,19 @@
 [Wireshark User's Guide](https://www.wireshark.org/docs/wsug_html_chunked/)  
 
 * beacon that has a set interval between each beacon
-  * `(tcp.flags.syn) && !(tcp.flags.ack == 1)`  
+  * `(tcp.dstport == 21) && (tcp.flags.syn == 1) && !(tcp.flags.ack == 1)`  - 66.220.9.50
+
+* Beacon at a random interval
+  * `icmp.type == 8` payload appears to be a normal ICMP 
+  * 184.168.221.35 - 2-10m - icmp
+
+* find relitive start (I ctf'd this question)
+  * (tcp.flags.syn == 1) && !(tcp.flags.ack == 1) && (ip.dst == 204.16.139.24)
+
+* Ended up starting by looking for URL IOCs
+  * `tcpdump -nnvXS -r ./beacons.pcapng | grep -nof ./URL.txt`
+    * kayauto.net
+    * gobroadreach.com
 
 ## Exercise 4.1-04: Deploy GRR Agent  
 
