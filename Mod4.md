@@ -31,16 +31,19 @@
   * `(tcp.dstport == 21) && (tcp.flags.syn == 1) && !(tcp.flags.ack == 1)`  - 66.220.9.50
 
 * Beacon at a random interval
-  * `icmp.type == 8` payload appears to be a normal ICMP 
+  * `icmp.type == 8` payload appears to be a normal ICMP  
   * 184.168.221.35 - 2-10m - icmp
 
 * find relitive start (I ctf'd this question)
-  * (tcp.flags.syn == 1) && !(tcp.flags.ack == 1) && (ip.dst == 204.16.139.24)
+  * `(tcp.flags.syn == 1) && !(tcp.flags.ack == 1) && (ip.dst == 204.16.139.24)`
 
 * Ended up starting by looking for URL IOCs
   * `tcpdump -nnvXS -r ./beacons.pcapng | grep -nof ./URL.txt`
     * kayauto.net
     * gobroadreach.com
+
+* Use IO graph to find becon
+  * create filters for HTTP, 443, icmp, ftp
 
 ## Exercise 4.1-04: Deploy GRR Agent  
 
@@ -73,3 +76,10 @@
      * `invoke-command -session $session -command {get-item c:\windows\system32\drivers\etc\hosts}` - 824
   4) what is the only added username on the remote system
      * `invoke-command -session $session -command {(get-localuser).name}`  
+
+## Exercise 4.1-05: Create a PowerShell Script to Collect Data from Multiple Systems  
+
+[Microsoft PowerShell: Invoke-Command](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/invoke-command?view=powershell-5.1)
+[Microsoft PowerShell: About Arrays](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-5.1)
+
+[Scripts](https://github.com/P0w3rChi3f/Get-Baselines/blob/main/Get-DCIBaseline.ps1)
