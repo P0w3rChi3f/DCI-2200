@@ -83,3 +83,13 @@
 [Microsoft PowerShell: About Arrays](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-5.1)
 
 [Scripts](https://github.com/P0w3rChi3f/Get-Baselines/blob/main/Get-DCIBaseline.ps1)
+
+## Exercise 4.2-06: Identify Data Exfiltration Artifacts on a Windows System
+
+[List of File Signatures](https://en.wikipedia.org/wiki/List_of_file_signatures)  
+[Alternate Data Streams in NTFS (PowerShell)](https://docs.microsoft.com/en-us/archive/blogs/askcore/alternate-data-streams-in-ntfs)  
+[PowerShell Check File Headers](http://learningpcs.blogspot.com/2012/07/powershell-v3-check-file-headers.html)  
+[PowerShell Get-Content Documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-content?view=powershell-5.1)  
+[Get Hex Dumps of Files in PowerShell](https://www.itprotoday.com/powershell/get-hex-dumps-files-powershell)  
+
+[Started my Hunt Script](https://github.com/P0w3rChi3f/start-hunt.ps1)
