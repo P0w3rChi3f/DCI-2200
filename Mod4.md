@@ -82,7 +82,7 @@
 [Microsoft PowerShell: Invoke-Command](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/invoke-command?view=powershell-5.1)
 [Microsoft PowerShell: About Arrays](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-5.1)
 
-[Scripts](https://github.com/P0w3rChi3f/Get-Baselines/blob/main/Get-DCIBaseline.ps1)
+[Created Get-DCIBaseline Script](https://github.com/P0w3rChi3f/Get-Baselines/blob/main/Get-DCIBaseline.ps1)
 
 ## Exercise 4.2-06: Identify Data Exfiltration Artifacts on a Windows System
 
@@ -95,57 +95,37 @@
 [Started my Hunt Script](https://github.com/P0w3rChi3f/start-hunt.ps1)
 
 1. script to search for all files that have a .ZIP or .RAR extension in the C:\Documents\exercise_8 directory
-
     * 261
-
 2. script to identify which files within the IdentifyDataExfil_ADS directory have an ADS.  
-
     * 3
-
 3. names of the files that contain the ADS
-
     * idblcsoznj.txt
     * wfzardupoq.txt
     * pqyuemditc.txt  
-
 4. the last 4 digits of the SHA1 for each file
-
     * COA4
     * 5332
     * 6919  
-
 5. Extract the ADS into files and use PowerShell to determine the file signature of each file
      file was extracted from ADS1  
-
      * RAR
-
 6. Content accessable - yes
-
 7. file was extracted from ADS2  
-
     * Zip
-
 8. content of the file extracted from ADS2  
-
     * ex8_pwdump.txt
-
 9. type of file was extracted from ADS3  
-  
     * Text
-
 10. content of the file extracted from ADS3
-
     * Nothing of Value  
-
 11. PowerShell searches to identify the file signature of all the files we have found, including those within an ADS. How many TXT files have a file signature that does not imply it is a text file?  
-
     * 58  
 
 ## Exercise 4.2-07: Identify Keylogger Artifacts on a Windows System
 
-[PowerShell Get-Content Documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-content?view=powershell-5.1)
-[APT1 Documentation](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fmalware.lu%2Fassets%2Ffiles%2Farticles%2FRAP002_APT1_Technical_backstage.1.0.pdf&clen=1750876&chunk=true)
-[GRR Rapid Response Documentation](https://grr-doc.readthedocs.io/en/latest/)
+[PowerShell Get-Content Documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-content?view=powershell-5.1)  
+[APT1 Documentation](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fmalware.lu%2Fassets%2Ffiles%2Farticles%2FRAP002_APT1_Technical_backstage.1.0.pdf&clen=1750876&chunk=true)  
+[GRR Rapid Response Documentation](https://grr-doc.readthedocs.io/en/latest/)  
 
 1. Where was the currently running keylogger found on the system?
     * `get-item HKCU:\Software\Microsoft\Windows\CurrentVersion\Run`
@@ -163,3 +143,103 @@
 
 4. What is the value name of the entry found in the associated registry run key?
     * Keyboard Driver
+
+## Exercise 4.2-08: Understand a Possible Phishing Attempt
+
+[Wireshark](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html)
+[NetworkMiner](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fwww.netresec.com%2Fdocs%2FNetworkMiner_Manual.pdf&clen=230005&chunk=true)
+[QuickStego](http://www.quickcrypto.com/free-steganography-software.html)
+
+1. (DNS) && !(ICMP) - 69.5
+   * Statistics, Protocol History
+2. smtp - Present
+3. smtp - 0.2%
+4. smtp.req.comman == "MAIL" - rocketmail
+5. smtp.req.comman == "MAIL" - kelly  
+6. smtp.req.comman == "MAIL" -> Follow TCP Stream - Press Release
+7. smtp.req.comman == "MAIL" -> Follow TCP Stream - internal_discuss.zip
+8. smtp.req.comman == "MAIL" -> Follow TCP Stream - Base64
+9. False
+    * [Carve out Data With WireShark](https://osqa-ask.wireshark.org/questions/61169/extract-an-attachment-from-a-sniffed-smtp-session/)
+    * [Base64 Decode binaries with PowerShell/.NET](https://eddiejackson.net/wp/?p=23393)
+    * My code
+      * extrated the base64 encoded zip file and saved as 'carve.b64'
+
+        ``` PowerShell
+
+          $b64 = get-content .\carve.b64
+          $filepath = $env:USERPROFILE\Desktop\Decoded.zip
+          $byteArray = [system.conver]::FromBase64string($b64)
+          [system.io.file]::WriteAllBytes($filepath, $byteArray)
+
+        ```
+
+    * Alternate Solution
+      * Find packet -> Right click  
+
+10. NetworkMinor -> files -> right click internal_discuss.zip -> Calculate - e73a
+11. NetworkMinor -> files -> right click internal_discuss.zip -> Calculate - 344
+12. NetworkMinor -> files -> right click internal_discuss.zip -> Calculate - 10/09/2018 06:00 Pm
+13. NetworkMinor -> files -> right click internal_discuss.zip -> Open - EBC2-Table.bat
+14. Host enmumeration
+15. Quick Stego -> open Image -> copy the text
+16. Windows default tools to base64 decode  
+    * `certutil -decode <file with b64 code> data.txt`
+    * `[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("blahblah"))`
+
+``` Other Notes
+* base64 stuff
+  [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("nVnV"))
+```
+
+## Mod 4 Test Review
+
+1. Given
+2. Given
+3. Know how to scan the registry key with remote PowerShell use Given IP  (4.1-05)
+    * Read in the IOC List
+
+    ```PowerShell
+      $iocs = (get-content .\IOCs.txt | split-path -leaf).replace('"','')
+    ```
+
+    * Get the local Registry Artifacts
+
+    ```PowerShell
+      $RegItems @()
+      $RegItems += get-item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+      $RegItems += get-item HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
+    ```
+
+    * Get the Remote Registry Artifacts
+
+    ```PowerShell
+      Invoke-Command -ComputerName $ip -Credential $creds -ScriptBlock {
+        get-item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+        get-item HKCU$:\Software\Microsoft\Windows\CurrentVersion\Run
+      }
+    ```
+
+4. what binary is associated with IOC in Registry
+    * `get-item HKCU$:\Software\Microsoft\Windows\CurrentVersion\Run`
+5. What DLL is on system from list - 4.2-07 #2
+    * same code as #7
+6. find mutant of the binary (handle, procmon, GRR)
+    * `.\handle64.exe -a | findstr Mutant`
+    * `get-ciminstance win32_process | where {$_.name -eq "adobeupdater.exe"} | select Name, TreadCount`  
+7. Look for range of files, log files, lateral movement, executed?, IPs, prefetch, strings
+
+    ``` Powershell
+    Get—ChildItem —path c:\ —Include log —Recurse —ErrorAction SilentlyContinue —force | Where—object {S_.CreationTime —ge "01/02/2018" —and $_.CreationTime —le "01/04/2018"} | Full name,Creationtime, lastwritetime  
+    ```
+
+    Or  
+
+    ```PowerShell
+    get-childitem -path path -recurse -force -erroraction silentlycontinue | where-object {$_.CreationTime -gt "time" -and $_.CreationTime -lt "time"} select-object Name, CreationTime
+    ```
+
+4.1-04 - Notes up above
+4.2-07 #2
+2.3-09 - Notes made
+8.1-059
