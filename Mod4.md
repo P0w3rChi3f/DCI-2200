@@ -200,13 +200,13 @@
     * Read in the IOC List
 
     ```PowerShell
-      $iocs = (get-content .\IOCs.txt | split-path -leaf).replace('"','')
+      $KnwIOCs = (get-content .\IOCs.txt | split-path -leaf).replace('"','')
     ```
 
     * Get the local Registry Artifacts
 
     ```PowerShell
-      $RegItems @()
+      $RegItems = @()
       $RegItems += get-item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
       $RegItems += get-item HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
     ```
@@ -214,10 +214,20 @@
     * Get the Remote Registry Artifacts
 
     ```PowerShell
-      Invoke-Command -ComputerName $ip -Credential $creds -ScriptBlock {
+      $regItems = Invoke-Command -ComputerName $ip -Credential $creds -ScriptBlock {
         get-item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
         get-item HKCU$:\Software\Microsoft\Windows\CurrentVersion\Run
       }
+    ```
+
+    * Code to compare the IOC list to Registry Items
+
+    ```PowerShell
+    foreach ($item in $RegItems.property){
+      if ($item -in $knwIOCs){
+        $item
+        }
+    }
     ```
 
 4. what binary is associated with IOC in Registry
