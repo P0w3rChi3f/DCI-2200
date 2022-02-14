@@ -233,7 +233,8 @@
 4. what binary is associated with IOC in Registry
     * `get-item HKCU$:\Software\Microsoft\Windows\CurrentVersion\Run`
 5. What DLL is on system from list - 4.2-07 #2
-    * same code as #7
+    * get-process -id 2296 | select -expandproperty Modules | select moduleName, FileName
+    * (get-content c:\Windows\hpisnst.exe | select-string -pattern "[A-z]+\.dll").matches.value
 6. find mutant of the binary (handle, procmon, GRR)
     * `.\handle64.exe -a | findstr Mutant`
     * `get-ciminstance win32_process | where {$_.name -eq "adobeupdater.exe"} | select Name, TreadCount`  
