@@ -142,16 +142,20 @@
 * [Nmap Cheat Sheet](https://nmap.org/)  
 
 * Command to scan endpoint 192.168.13.17
-  * `nmap -Pn 192.168.13.17`  
+  * `nmap -Pn 192.168.13.17` 
+  * TCP 135 
 
 * Command to scan endpoint 192.168.13.17 and get OS
   * `nmap -Pn -O 192.168.13.17`  
+  * Microsoft Windows 10
 
 * A command to scan endpoints 192.168.13.19 and 192.168.13.20.  
   * `nmap -Pn -O 192.168.13.19 172.168.13.20`
+  * Web servers
 
 * Command to scan a full subnet and OS
-  * `nmap -O 192.168.13.0/24`
+  * `nmap -O 192.168.13.0/24`  
+  * 192.168.13.32
 
 ## Exercise 3.2-07: Develop Rudimentary Ping Scan  
 
@@ -193,6 +197,7 @@
   * Found PCCleaner in some HTTP traffic
   * Tracked it down to packet TCP Stream 255
   * Actuall file was 150067.htm
+  * pccleaner.exe
 
 * Extract file
   * Wireshark -> File -> Export Objects -> Http -> 150067.htm
@@ -211,7 +216,7 @@
 * What is the IP address of the identified domain?
   * 10. `66.77.206.85`
 * What is the interval of the beacon?
-  * 11. ????? I will figure it out.
+  * 11. 60 seconds
   * Once I was able to identify the Malicious IP I did a filter of `ip.dst 66.77.206.85`
 
 ## Exercise 3.2-09: Analyze Obfuscated Traffic
@@ -279,8 +284,23 @@
     * `invoke-command -computer name 172.16.12.3 -command {get-filehash -Algorithm SHA256 c:\Windows\System32\*} | out-file ~\Desktop\RemoteFileHashes.txt`
   * Compare the file with a know list from the previous step.
     * Ended up doing a manual file comare.
-      * Excel2017.exe and extrac32.exe
-  
+      * Excel2017.exe and extrac32.exe  
+
+1. Which malicious binaries are found on the Windows system?
+    * FileHunter-Win32.exe  
+    * extension.exe  
+2. Based on the previous two malicious binaries, did they establish persistence within the registry?
+    * No
+3. Using the hashes, classify the type of malware the binaries are.  
+    * Adware
+4. On the remote machine, which malicious binaries are on the system?  
+    * jackinthebox.exe
+    * excel2017.exe
+5. Which files have been changed since the baseline was made?
+    * Noise.dat  
+6. Which file is in the baseline and in the System32 directory?
+    * recdisc.exe.mui
+
 ## Exercise 3.3-13 Analyze Hosts to Determine IOC Presence
 
 * Started with an export of all the dns queries from wireshark
@@ -303,7 +323,24 @@
     * `get-service <service name>`
   * Once I found a match, I ran `get-CimInstance Win32_Service | Where-Object {$_.name -like "*aec*"} | select Name, Status, PathName`
     * `C:\Users\DCI Student\AppData\Roaming\Microsoft\wuaclt.exe`
-    * Also created a script [Get-maliciousService](https://github.com/P0w3rChi3f/Get-MaliciousServices)
+    * Also created a script [Get-maliciousService](https://github.com/P0w3rChi3f/Get-MaliciousServices)  
+
+1. List all domains that the host is connecting to that match the given IOCs. Provide your answer in alphabetical order with a space between each domain.  
+    * deebeedesigns.ca  
+    * firebirdonline.com  
+    * thecrownsgolf.org
+2. Out of the following GET paths, which IOCs were requested? Select all that apply.  
+    * news/media/info.html
+    * SmartNav.jpg
+3. What IP IOCs are present on the system?
+    * 63.192.38.11
+    * 65.110.1.32
+    * 140.116.70.8  
+4. Find all registry run keys that match IOCs. What are the executables referenced that match IOCs?  
+    * rouj.exe
+    * runinfo.exe
+5.Find the service name that matches the IOC list. What is the binary path of the executable it references (including the executable itself)?  
+    * C:\Users\DCI Student\AppData\Roaming\Microsoft\wuaclt.exe
 
 ## Exercise 3.3-14: Analyze a Security Event Log
 

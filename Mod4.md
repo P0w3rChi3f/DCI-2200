@@ -20,7 +20,7 @@
 * Evidence of network traffic from ituneshelper Running malware
   * `netstat -naob | select-string "Ituneshelper" -context (1,0)`
 
-  * `get-netTCPConnecton | select LocalAddress, LocalPort, RemoteAddress, RemotePort, state, {name="Process; expression={($_.OwningProcess | foreach {get-process -id $_}).ProcessName}} | select-string -pattern "ituneshelper"`
+  * `Get-NetTCPConnection | select LocalAddress, LocalPort, RemoteAddress, RemotePort, state, @{name="Process"; expression={($_.OwningProcess | foreach {get-process -id $_}).ProcessName}} | foreach {get-process -id $_}).ProcessName}} | select-string -pattern "ituneshelper"`
 
 ## Exercise 4.1-03: Analyze Network Traffic to Identify Beacon
 
