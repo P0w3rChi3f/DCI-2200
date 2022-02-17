@@ -220,8 +220,8 @@
 2. List the perceived impact to the mission represented by each of the following Cyber Key-Terrain:
 
     * Voting Server – Loss would prevent website from functioning for voters. Stores votes on Voting Database Server
-    * VoterDB - Stores Voting Data. Loss of tally collected would have affected the Voting overall 
-    * Email Server -  Loss of confirmation Emails for Votes and any help for voters 
+    * VoterDB - Stores Voting Data. Loss of tally collected would have affected the Voting overall  
+    * Email Server -  Loss of confirmation Emails for Votes and any help for voters  
     * FTP Server – Loss of any critical backup files, and data that would be needed to keep the Voting operation running.
 
 3. If you received any email notifications, what were they and how did you fix the issue?
@@ -235,19 +235,32 @@
 
     * C:\xampp\htdocs\create.php
 
+## 5.1-05: Installing Snort on Windows
+
+1. How many total TCP connections were made to 10.10.10.10
+    * 9
+2. How many total UDP packets were sent to 10.10.10.10
+    * 5
+3. The UDP Communication used what port?
+    * 8000
+4. How many TCP connections to 10.10.10.10 contained the cotent "delete"?
+    * 1
+5. How many connections contained the content "drop"?
+    * 4
+
 ## Mod5 Review
 
 * 7-32 already completed
-* 2.3-06
-* 2.3-07
-* 2.3-08
-* 2.3-12
-* 3.1-05
-* 3.2-06
-* 3.3-12
-* 3.3-13
-* 4.1-02
-* 5.1-03
-* 5.1-04
-* 5.1-05
-* 5.1-08
+* 2.3-06 - Updated
+* 2.3-07 - Updated
+* 2.3-08 - Updated
+* 2.3-12 - Updated
+* 3.1-05 - Updated
+* 3.2-06 - Updated
+* 3.3-12 - Updated
+* 3.3-13 - Updated
+* 4.1-02 - Updated
+* 5.1-03 - Updated
+* 5.1-04 - Updated
+* 5.1-05 - Not Testable
+* 5.1-08 - Updated
