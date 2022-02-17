@@ -105,7 +105,7 @@
 * [FTK Imager](https://learn.dcita.edu/resume_course/305624)  
 * [Sysinternals Handle](https://docs.microsoft.com/en-us/sysinternals/downloads/handle)  
 
-* Steps to verifie if a file has been modified.
+* Steps to verify if a file has been modified.
   * Using FTK Imager, browse to the each file and `export file hash`
   * Using PowerShell use the command `Get-FileHash -Algorithm <MD5 or SHA1> <c:/Path/to/file.exe>`
   * Do a manual comparison.  This is the quickest way since we only have to look at 4 applicaions.  Real world we would have exported a full file hash list from FTK and obained a file hash list with PowerShell then did a comparison.
@@ -136,26 +136,55 @@
 
 * I used process Explorer to get the file paths of the malicious processes.
 
+1. Which of the following files in c:\windows\system32 have been manipulated on the current system, compared to the baseline?  
+    * Runonce.exe
+    * GRR.exe
+2. Putty was in the original system image, but this owner decided to delete Putty.exe. What were the last 4 characters of the md5?  
+    * 0Ce9 - My answer - MD5
+    * 3f1b - Feedback - SHA1
+3. Are there any new users on the host machine compared to the baseline? If yes, list them here (separated by commas if more than one).  
+    * dciadmin  
+4. Extract the registry files from the hard drive. Are there any new run key entries that don't match the baseline? If yes, what are the paths to the binary referenced by them?  
+    * %LOCALAPPDATA%\av64.exe
+    * %LOCALAPPDATA%\Microsoft\VMwareManager.exe
+    * %TEMP%\csrs.exe  
+5. What is the correct volatility profile to use on this image?  
+    * Win10x64_14393  
+6. Which of the following processes on the current machine has the same PID as the baseline?  
+    * System
+7. Are there any new suspicious processes running on the system that don't match the baseline?  
+    * nc64
+    * av64
+    * sedsvc - Not of feedback
+    * dllhost - Not of feedback  
+8. What is the mutant of the first abnormal process, alphabetically?  
+    * crazy123
+9. Are there any processes on the current machine listening on UDP that were not in the baseline? If yes, what is the name of the process?  
+    * nc64.exe
+10. Using the first abnormal process (alphabetically), what is the file that started that process?
+    * Task Scheduler - Mine  
+    * C:\Program Files (x86)\Google\av64.exe  - feedback  
+11. Using the second abnormal process (alphabetically), what is the file that started that process?  
+    * vpn - Mine  
+    * C:\Users\DCI Student\Desktop\Exercise\config\nc64.exe - feedback  
+
 ## Exercise 3.2-06 Perform Nmap Scan for Endpoint Identification
 
 * [Nmap Documentation](https://highon.coffee/blog/nmap-cheat-sheet/)
 * [Nmap Cheat Sheet](https://nmap.org/)  
 
-* Command to scan endpoint 192.168.13.17
-  * `nmap -Pn 192.168.13.17` 
-  * TCP 135 
-
-* Command to scan endpoint 192.168.13.17 and get OS
-  * `nmap -Pn -O 192.168.13.17`  
-  * Microsoft Windows 10
-
-* A command to scan endpoints 192.168.13.19 and 192.168.13.20.  
-  * `nmap -Pn -O 192.168.13.19 172.168.13.20`
-  * Web servers
-
-* Command to scan a full subnet and OS
-  * `nmap -O 192.168.13.0/24`  
-  * 192.168.13.32
+1. Command to scan endpoint 192.168.13.17
+    * `nmap -Pn 192.168.13.17`  
+    * TCP 135  
+2. Command to scan endpoint 192.168.13.17 and get OS
+    * `nmap -Pn -O 192.168.13.17`  
+    * Microsoft Windows 10
+3. A command to scan endpoints 192.168.13.19 and 192.168.13.20.  
+    * `nmap -Pn -O 192.168.13.19 172.168.13.20`
+    * Web servers
+4. Command to scan a full subnet and OS
+    * `nmap -O 192.168.13.0/24`  
+    * 192.168.13.32
 
 ## Exercise 3.2-07: Develop Rudimentary Ping Scan  
 
@@ -339,7 +368,7 @@
 4. Find all registry run keys that match IOCs. What are the executables referenced that match IOCs?  
     * rouj.exe
     * runinfo.exe
-5.Find the service name that matches the IOC list. What is the binary path of the executable it references (including the executable itself)?  
+5. Find the service name that matches the IOC list. What is the binary path of the executable it references (including the executable itself)?  
     * C:\Users\DCI Student\AppData\Roaming\Microsoft\wuaclt.exe
 
 ## Exercise 3.3-14: Analyze a Security Event Log
@@ -370,7 +399,7 @@
 * Find the user that was elevated to Admin
   * `(get-winevent -path <path\to\evtx\file> | where {$_.id -eq "4672"} | Select-object -expand message).split("n") | select-string -Pattern "Account Name:"` -gets a list of users who were elevated
 * Get event ID not related to user accounts or groups.
-  * 
+  * ``
 * Get file name for System integrity event ID  
   * found other System Integrity event Id through Google
   * Counted how many logs there were: `get-winevent -path <path\to\evtx\file> | measure` = 206
