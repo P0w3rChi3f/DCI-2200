@@ -74,22 +74,41 @@
 
 1. I would deploy a HIPS/HIDS solution to help prevent/detect Poison Ivy and User Training.  The malware gets onto the system through social engineering.  Once on the system, it starts the default web browser in the background and injects itself into that process.  Chances are the browser will be whitelisted and connections to the internet will look legit, so web filtering is out. Training the users not to receive things from strangers and backing that up with the HIDS/HIPS technology seems to be the better route.  
 
+        *** Email Content Filtering ***
+
 2. The report gives us a list of IPs and Domains to black list.  Starting with this information we could implement web content filtering.  We could also add a proxy and force all web traffic through it, making it harder for the C2.  
+
+        *** NIDS/HIDS, Application Whitelisting ***
 
 3. We could use a Web Content filter here to detect data leaving our network.  We could set up some fake data (canaries) to alert us that data exfiltration was attempted.
 
+        *** Automate dynamic analysis of email and web content run in a sandbox ***
+
 4. I will have to go with User Training on this one.  There are so many ways mimikatz can be delivered that we need to turn our users into human sensors.
+
+        *** Application Whitelisting, endpoint detection ***
 
 5. I would restrict admin privileges.  limiting these permissions and only using these permissions as needed will limit the number of passwords, hashes, cache, etc that it will collect.  
 
+        *** Restrict Admin privileges, disable local admin, multi-factor Authentication ***
+
 6. I would deploy an OS generic exploit mitigation to help protect the memory where the hashes are located.  
 
+        *** restrict Admin Privileges ***
+
 7. Same a question 5.   Stop admins from logging in and only running applications as admin when necessary.  
+
+        *** Anything with Passwords ***
 
 ### Case Study 03-02  
 
 1. It can still be recommended.  
+
+        *** This may allow the malware to reach our endpoints. So we will have to rely more heavily on endpoint protection (AV, EDR, etc). ***
+        *** User Training ***
+
 2. We could recommend OS generic exploit mitigation instead, it has an upfront cost of low.  
+
 3. We would need to find a different solution, maybe like using the host based firewall to filter traffic  
 
 ### Case Study 03-03  
@@ -103,6 +122,14 @@
     * Run packet capture - to help identify unknown processess and see if they are reaching out to the internet
     * Kill active processes - Most applicatons will need to be inactive before removal
     * Remove abnormalities - Finally remove the abnormality
+
+            ```Notes
+                Kill active processes
+                Verify service list
+                Verify installed programs
+                Remove abnormalities
+                Run packet capture
+            ```
 
 ## Exercise 5.1-04: Risk-Mitigation Tools and Techniques  
 
@@ -122,7 +149,7 @@
 1. For 10.10.10.10: List the total amount of high and medium severity vulnerabilities that are reported.  
     * 8 (levels=hm and 10.10.10.10)  
 2. List the total amount of vulnerabilities that are fixed by vendor patches.
-    * 4  
+    * 4  `solution_type=VendorFix`
 3. List how many total vulnerabilities have workarounds.
     * 1
 4. List how many total vulnerabilities require mitigation.  
@@ -150,7 +177,7 @@
 ### Case Study 04-04  
 
 1. What is the process name listening on port 21 on 10.10.10.10?
-    * `Get-NetTCPConnection | select LocalAddress, LocalPort, RemoteAddress, RemotePort, state, @{name="Process"; expression={($_.OwningProcess | foreach {get-process -id $_}).ProcessName}} | foreach {get-process -id $_}).ProcessName}}`  
+    * `Get-NetTCPConnection | select LocalAddress, LocalPort, RemoteAddress, RemotePort, state, @{name="Process"; expression={($_.OwningProcess | foreach {get-process -id $_}).ProcessName}}`  
     * FileZillaServer
 2. What is the PowerShell command to create a firewall rule?
     * New-NetFirewallRule  
@@ -162,6 +189,65 @@
 5. What .net framework object would be used to download and upload FTP files?  
     * System.Net.Webclient
 
+## Exercise 5.1-06: Provide Risk Analysis Based on an RMP
+
+[APT1](https://www.mandiant.com/resources/apt1-exposing-one-of-chinas-cyber-espionage-units)
+[NIST 800-30: Risk Analysis Process](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fnvlpubs.nist.gov%2Fnistpubs%2FLegacy%2FSP%2Fnistspecialpublication800-30r1.pdf&clen=826897&chunk=true)
+[ASD - Mitigation Details](https://www.cyber.gov.au/acsc/view-all-content/publications/strategies-mitigate-cyber-security-incidents)  
+
+[Mitigation Strategies](Documents/Mitigation_Strategies_2017_Details_0.pdf)  
+[Mitigation Table](Documents/Ex5.1-06-Mitigation-Table.xlsx)  
+
+1. Email content filters help with malicious documents in email, but there are other ways to move documents in and out of the environment.  Using a cloud storage provider, for example.  A web content filter can scan the document, coming to or from the storage area, for malicious content.  Web filtering content also helps protect against malicious sites, this would help mitigate a watering hole attack.  
+2. Yes, this is a risk.  If an attacker could get on a machine where the local admin was logged in, steal the admin hash or password, the attacker could move laterally through the network.  If this environment is in a Windows domain, there is a free solution to mitigate this risk, the solution is LAPS.  It stands for Local Administrator Password Solution.  What it does is allow AD to manage the passwords for the local administrator on each machine.  It creates a random password and changes it every 30 days (by default).  The risk here is a machine that was synchronized with AD loses its trust relationship and the local admin password is changed and does not work.  In this situation, you will most likely lose the data on that machine.  If this is a Linux environment, there are tools you can purchase that are similar to LAPS.  
+3. You are blocking spoofed emails from your organization, but there are tools (30 min email) that are legitimate that an attacker can use to send a phishing email from.  If crafted well enough, it could trick the user into clicking a link, or opening an attachment.  
+4. Blacklist will help stop the execution of known malicious applications, but it will not stop the unknown malicious applications.  To accomplish that, the organization would need to implement a whitelist solution.  Meaning blocking everything unless you verify it is non-malicious.
+5. Links, Facebook, and Twitter can be used as a vehicle to deliver malicious links to the organization.  There is a potential risk of someone (likely someone of importance) being profiled. Once profiled a well-crafted message or post would be sent with a link to "learn more".  This link has the potential of sending the user to a site that could deliver a malicious payload to the individual.  This is a type of Watering Hole attack.  
+
+## Exercise 5.1-08: Generate and Implement an RMP for a Network
+
+[Nmap guide](https://nmap.org/)
+
+1. Using the information obtained during your vulnerability assessment and network enumeration, what is the perceived threat to the Maryland Board of Elections?
+
+    * Weak Passwords across the Voting Server, Mail Server and Voting Database Server.
+    * Some Ports were possible open to attack and needed to be secure.
+    * Voting Server, Mail Server and FTP service each had critical services which need to be running to make sure the voting took place.
+    * FTP Server had accounts which did not have password; default password needed to be changed
+    * The Firewalls were not enabled across the servers.
+    * Key files especially the Voting Database, mysql  and htdocs for web were not backed up.
+
+2. List the perceived impact to the mission represented by each of the following Cyber Key-Terrain:
+
+    * Voting Server – Loss would prevent website from functioning for voters. Stores votes on Voting Database Server
+    * VoterDB - Stores Voting Data. Loss of tally collected would have affected the Voting overall 
+    * Email Server -  Loss of confirmation Emails for Votes and any help for voters 
+    * FTP Server – Loss of any critical backup files, and data that would be needed to keep the Voting operation running.
+
+3. If you received any email notifications, what were they and how did you fix the issue?
+
+    * Loss of Service. Check service using PowerShell:  
+    * Get-Service –Name <name of Service>
+    * Start-Service –Name <name of Service>
+    * Loss of data file – Restore from the Backup Server
+
+4. The web developer has created a means of easily managing the users included in the election. This file needs to be found and secured to prevent potential tampering, what is the file name?
+
+    * C:\xampp\htdocs\create.php
+
 ## Mod5 Review
 
 * 7-32 already completed
+* 2.3-06
+* 2.3-07
+* 2.3-08
+* 2.3-12
+* 3.1-05
+* 3.2-06
+* 3.3-12
+* 3.3-13
+* 4.1-02
+* 5.1-03
+* 5.1-04
+* 5.1-05
+* 5.1-08
