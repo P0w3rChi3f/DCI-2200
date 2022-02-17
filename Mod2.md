@@ -13,16 +13,53 @@
     * n -> 1 -> 1024 -> +4.3G -> w  
   * mkfs -t ext4 /dev/sdc  
 
+1. Which course of action is the BEST approach to prepare your storage media for storing new incident data?
+    * Use a software tool to forensically wipe the drives.
+2. Which course of action is the BEST approach to prepare your storage media for storing new incident data for this mission?  
+    * Obtain new unused drives to obtain the required data.  
+3. Review the data returned by EnCase Forensic Imager that indicates the drive was successfully wiped. In the space below, enter the total number of sectors wiped.  
+    * 10485760
+4. Using EnCase enter the last 4 characters of the MD5 hash of the drive you just wiped?  
+    * 46C9
+5. Once the above steps are completed, in the space below, enter the byte value for the 45,984th byte on the disk?  
+    * 78
+6. Using the tool of your choice create a 4.3 GB partition on the 5 GB drive. Were you able to successfully partition and format the 5 GB drive?
+    * Yes
+7. After formatting the partition with the ext4 file system record the number of inodes in the space provided below.  
+    * 327680 - Was marked wrong
+
 ## Exercise 2.3-07: Configure and Test GRR Rapid Response for Deployment/Use  
 
 * Fix Client Agents
   * On the GRR Server edit the `/etc/grr/server.local.yaml`  
   * run `sudo grr_config_updater repack_clients`  
 
+1. Were you able to successfully enroll the Windows 10 x64 machine to the GRR server?
+    * Yes
+2. Briefly describe what you did to complete the exercise and why it had to be done. - Was marked wrong
+    * I had to edit the /etc/grr/server.local.yaml file on the GRR Server then run, sudo grr_config_updated repack_clients to repack the clients.  I was able to download and install the agent after that.
+3. When trying to locate artifacts on one system using GRR, should you use a flow or a hunt? 
+    * Flow
+4. Using GRR, locate and examine the hosts file of the Windows 10 x64 machine. What is the size of the hosts file in bytes?
+    824 Bytes
+5. Using GRR, run a Registry Finder flow. What .exe is in the Run folder?
+    * OneDrive
+
 ## Exercise 2.3-08: Create Filesystem Artifact IOCs for GRR
 
 * File Command used to find artifacts
   * `%%environ_systemdrive\**10{FileNames}{Extentions}`
+
+1. Which executable files are on the system after running the CTE provided executable?  
+    * AdobeUpdater.exe
+    * wuauclt.exe  
+    * iTunesHelper.exe  
+2. What are the last four characters of the MD5 hash value for the binary “AdobeUpdater.exe?”  
+    * 598f (8abc459525f1918d399248252ec0598f)  
+3. The file size for the binary file “AdobeUpdater.exe” is how many bytes?  
+    * 5435706
+4. Find the latest modification date/time for the binary “AdobeUpdater.exe”. (Marked wrong - Is correct)
+    * 2017-08-14 03:58:26
 
 ## Exercise 2.3-09: Create Memory and Registry Artifact IOCs for GRR
 
@@ -68,6 +105,16 @@
   * `sudo snort -T -i eth1 -c /etc/nsm/so-sensor-eth1/snort.conf`  
 * Use this command to monitor Snort  
   * `snort -d -l /var/log/snort/ -h 10.0.0.0/24 -A console -c /etc/snort/snort.conf`  
+
+1. Once you have navigated to where the pcap file is located in SecOnion, what is the syntax for Tcpreplaying the pcap provided at top speed?  
+    * `tcpreplay -t -i ens34 <pcap>`
+    * `tcpreplay --topspeed --intf1=ens34 <pcap>`  
+2. After running the pcap through Tcpreplay, how many successful packets were there?  
+    * 12586  
+3. Given two of the malicious domain names, what is the last domain name found in the pcap?  
+    * news.hqrls.com  
+4. Given one malicious IP address, what is the last malicious IP address found in the pcap?  
+    * 143.89.35.7
 
 ## VIM Shortcuts  
 
