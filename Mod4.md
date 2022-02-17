@@ -22,6 +22,31 @@
 
   * `Get-NetTCPConnection | select LocalAddress, LocalPort, RemoteAddress, RemotePort, state, @{name="Process"; expression={($_.OwningProcess | foreach {get-process -id $_}).ProcessName}} | foreach {get-process -id $_}).ProcessName}} | select-string -pattern "ituneshelper"`
 
+1. Identify if there are indicators of compromise in the registry.  
+    * MattIsAwesome - Mine
+    * LastEnum - Mine
+    * Yes, there is a registry value that gets added to the system. - Feedback  
+2. If you identified IOC's, what group of keys appears to be modified?
+    * HKCU:\Software\Microsoft\Windows\CurrentVersion\Run - Mine
+    * The Current User’s Run Key (HKCU) - Feedback  
+3. List the values that may be IOC's.  
+    * %LocalAppData%\MattIsAwesome.exe - Mine  
+    * MattIsAwesome, ItunesHelper, (LastEnum) - Feedback  
+4. Identify any files that could be indicators of compromise. Include the absolute paths.  
+    * c:\Users\DCI Student\AppData\local\MattIsAwesome.exe - Mine
+    * MattIsAwesome.exe was added in C:\Users\DCI Student\AppData\Local -Feedback  
+    * ituneshelper.exe was added in C:\Users\DCI Student\AppData\Local\Temp -Feedback  
+    * Note: vmwaremanager.exe was added in c:\users\DCI Student\Local\Microsoft -Feedback  
+5. Is there evidence that ituneshelper could generate any network traffic? (Yes or No)  
+    * `strings64.exe .\ituneshelper.exe | -pattern "get(?:(?:\d|[01]?\d\d|2[0-4]\d|25[0-5])\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d|\d)(?:\/\d{1,2})?`  - Mine  
+    * 10.10.10.137 - Mine  
+    * Yes - Feedback  
+6. What is the private IP address the malware is trying to reach out to?
+    * 10.10.10.137 - Mine
+    * The malware attempts to contact 10.10.10.137 - Feedback  
+7. Is this activity characteristic of APT1 activity?  
+    * Yes. The artifacts from this malware match the characteristics of APT1.
+
 ## Exercise 4.1-03: Analyze Network Traffic to Identify Beacon
 
 [Wireshark: Display Filters](https://wiki.wireshark.org/DisplayFilters)  
