@@ -38,10 +38,10 @@
     * Yes
 2. Briefly describe what you did to complete the exercise and why it had to be done. - Was marked wrong
     * I had to edit the /etc/grr/server.local.yaml file on the GRR Server then run, sudo grr_config_updated repack_clients to repack the clients.  I was able to download and install the agent after that.
-3. When trying to locate artifacts on one system using GRR, should you use a flow or a hunt? 
+3. When trying to locate artifacts on one system using GRR, should you use a flow or a hunt?  
     * Flow
-4. Using GRR, locate and examine the hosts file of the Windows 10 x64 machine. What is the size of the hosts file in bytes?
-    824 Bytes
+4. Using GRR, locate and examine the hosts file of the Windows 10 x64 machine. What is the size of the hosts file in bytes?  
+    * 824 Bytes
 5. Using GRR, run a Registry Finder flow. What .exe is in the Run folder?
     * OneDrive
 
@@ -112,10 +112,13 @@
 2. After running the pcap through Tcpreplay, how many successful packets were there?  
     * 12586  
 3. Given two of the malicious domain names, what is the last domain name found in the pcap?  
-    * news.hqrls.com  
+    * news.hqrls.com 
+    update.sektori.org
+    download.epac.to
+    
 4. Given one malicious IP address, what is the last malicious IP address found in the pcap?  
     * 143.89.35.7
-
+    202.39.61.136
 ## VIM Shortcuts  
 
 * Search and replace
@@ -132,37 +135,43 @@
     * /$ = search for end of line
     * /\=line('.')-1 = replace with linenumber - 1
 
-* Visual Block editing
+* Visual Block editing  
   * `ESC` to enter "command mode"  
-  * Use `Ctrl+V` to enter visual block mode
-  * Move `Up/Down` to select the columns of text in the lines you want to comment.
-  * Then hit `Shift+i` and type the text you want to insert.
+  * Use `Ctrl+V` to enter visual block mode  
+  * Move `Up/Down` to select the columns of text in the lines you want to comment.  
+  * Then hit `Shift+i` and type the text you want to insert.  
   * Then hit `Esc`, wait 1 second and the inserted text will appear on every line.  
-* Moving within a file
+* Moving within a file  
   * $ = End of line  
   * 0 = Begining of line  
 
 ## Walkthrough  
 
-sudo vim iocips.txt
-sodo vim iocdomains.txt
-enter visual block mode (ctrl-V)
-shift i
-alert ip andy any -> any (msg: "Bad domain found)
-enter visual block mode (ctrl-V)
-end key
-A
-convert dots to multiple content feilds
-`:%s/\./"; content:"/g`
+```bash
+sudo vim iocips.txt  
+sodo vim iocdomains.txt  
+enter visual block mode (ctrl-V)  
+shift i  
+alert ip any any -> any any (msg: "Bad domain found"; content: "
+esc  
+enter visual block mode (ctrl-V)  
+move down
+end key  
+shift A
+"; sid: ReplaceMe;)  
+```
 
-Set the SID number
-`:let @a=1001000 | %s/ReplaceMe/\=''.(@a+setreg('a',@a+1))/g`
+convert dots to multiple content feilds  
+`:%s/\./"; content:"/g`  
 
-Test the rules
+Set the SID number  
+`:let @a=1010000 | %s/ReplaceMe/\=''.(@a+setreg('a',@a+1))/g`  
+
+Test the rules  
   `snort -T -c /etc/nsm/rules/local.rules`
-sudo rule-update
+sudo rule-update  
 
-TCP Replay
+TCP Replay  
 `sudo tcpreplay -T -i eth1`  
 
 ## Exercise 2.3-13: Use PowerShell to Collect Data  
