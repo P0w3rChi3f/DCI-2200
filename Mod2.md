@@ -165,14 +165,14 @@ convert dots to multiple content feilds
 `:%s/\./"; content:"/g`  
 
 Set the SID number  
-`:let @a=1010000 | %s/ReplaceMe/\=''.(@a+setreg('a',@a+1))/g`  
+`:let @a=1000000 | %s/ReplaceMe/\=''.(@a+setreg('a',@a+1))/g`  
 
 Test the rules  
   `snort -T -c /etc/nsm/rules/local.rules`
 sudo rule-update  
 
 TCP Replay  
-`sudo tcpreplay -T -i eth1`  
+`sudo tcpreplay -t -i eth1`  
 
 ## Exercise 2.3-13: Use PowerShell to Collect Data  
 
