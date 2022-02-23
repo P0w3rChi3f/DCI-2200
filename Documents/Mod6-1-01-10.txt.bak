@@ -1,0 +1,5 @@
+The first week we serveyed the land and verified the network map provided. We also verifed the baseline of the host machines.  We also prepared our equipment by formating our drives and running some test scripts to make sure they worked.  
+
+Once on ground we executed our sensor placement plan and moved into the survey stage where we took our scripts, equipment and other tools and started looking or evil.  We did end up fining several pecices of malicious items.  We found executables that were downloaded from the internet.  Some of them obtained persistance by setting the HKLM and HKCU run keys to execute the malware.  We found an image that was using stegonography and was hiding a base64 encoded password.  We also did some log analysis and looked at the various logon types.
+
+When we had a handle on all the IoC's we moved into the secure stage.  While in this stage we continued to Idnetify Data Exfil, Deploy GRR, Identify Beacons, investigated some a Possible Phish attempt and both true and false positive events.

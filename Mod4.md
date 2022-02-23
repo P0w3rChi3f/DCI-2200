@@ -104,9 +104,8 @@
 
 ## Exercise 4.1-05: Create a PowerShell Script to Collect Data from Multiple Systems  
 
-[Microsoft PowerShell: Invoke-Command](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/invoke-command?view=powershell-5.1)
-[Microsoft PowerShell: About Arrays](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-5.1)
-
+[Microsoft PowerShell: Invoke-Command](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/invoke-command?view=powershell-5.1)  
+[Microsoft PowerShell: About Arrays](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-5.1)  
 [Created Get-DCIBaseline Script](https://github.com/P0w3rChi3f/Get-Baselines/blob/main/Get-DCIBaseline.ps1)
 
 ## Exercise 4.2-06: Identify Data Exfiltration Artifacts on a Windows System
@@ -116,7 +115,6 @@
 [PowerShell Check File Headers](http://learningpcs.blogspot.com/2012/07/powershell-v3-check-file-headers.html)  
 [PowerShell Get-Content Documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-content?view=powershell-5.1)  
 [Get Hex Dumps of Files in PowerShell](https://www.itprotoday.com/powershell/get-hex-dumps-files-powershell)  
-
 [Started my Hunt Script](https://github.com/P0w3rChi3f/start-hunt.ps1)
 
 1. script to search for all files that have a .ZIP or .RAR extension in the C:\Documents\exercise_8 directory
@@ -171,8 +169,8 @@
 
 ## Exercise 4.2-08: Understand a Possible Phishing Attempt
 
-[Wireshark](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html)
-[NetworkMiner](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fwww.netresec.com%2Fdocs%2FNetworkMiner_Manual.pdf&clen=230005&chunk=true)
+[Wireshark](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html)  
+[NetworkMiner](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fwww.netresec.com%2Fdocs%2FNetworkMiner_Manual.pdf&clen=230005&chunk=true)  
 [QuickStego](http://www.quickcrypto.com/free-steganography-software.html)
 
 1. (DNS) && !(ICMP) - 69.5
@@ -275,7 +273,7 @@
     get-childitem -path path -recurse -force -erroraction silentlycontinue | where-object {$_.CreationTime -gt "time" -and $_.CreationTime -lt "time"} select-object Name, CreationTime
     ```
 
-4.1-04 - Notes up above
-4.2-07 #2
-2.3-09 - Notes made
-8.1-059
+4.1-04 - Notes up above  
+4.2-07 #2  
+2.3-09 - Notes made  
+8.1-059  

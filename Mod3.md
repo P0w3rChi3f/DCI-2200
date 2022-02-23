@@ -194,7 +194,28 @@
 * [PowerShell Scripting Cookbook](https://web.archive.org/web/20190220192836/https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-5.1)
 * [Writing Scripts with PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/ise/how-to-write-and-run-scripts-in-the-windows-powershell-ise?view=powershell-5.1)
 * [Writing Batch Scripts](https://www.howtogeek.com/263177/how-to-write-a-batch-script-on-windows/)
-* [Command Line Reference](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-xp/bb490890(v=technet.10)?redirectedfrom=MSDN)
+* [Command Line Reference](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-xp/bb490890(v=technet.10)?redirectedfrom=MSDN)  
+
+* My Ping Sweep Code:
+
+  ```PowerShell
+  $IPList = 1..255 | ForEach-Object {"172.29.234.$_"}
+
+  $ReplyResults = @()
+  $i = 0
+  foreach ($node in ($IPList)){
+      $i += 1
+      Write-Progress “Scanning Network” -PercentComplete (($i/$IPList.Count)*100)
+      $icmpresults = ping $node -n 1 
+      try {
+          $ReplyResults += ((($icmpresults | Select-String "reply" | Where-Object {$_ -notlike "*unreachable*"}).ToString()).Split(" ")[2]).TrimEnd(":")
+      }
+      catch {
+          write-host "$node is not accessable"
+      }
+  } 
+  $ReplyResults
+  ```
 
 ## Exercise 3.2-08: Perform Traffic Analysis Using Wireshark
 
@@ -451,10 +472,10 @@
 
 ## Exercise 3.3-17 Characterize Binaries
 
-[Mandiant: Practical Malware Analysis by Kris Kendall](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fwww.blackhat.com%2Fpresentations%2Fbh-dc-07%2FKendall_McMillan%2FPaper%2Fbh-dc-07-Kendall_McMillan-WP.pdf&clen=1047569&chunk=true)
-[Structure of a Portable Executable (Graphic)](https://upload.wikimedia.org/wikipedia/commons/0/09/Portable_Executable_32_bit_Structure.png)
-[Structure of a Portable Executable](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format?redirectedfrom=MSDN)
-[Malwarefox.com: Classes/types of Malware](https://www.malwarefox.com/malware-types/)
+[Mandiant: Practical Malware Analysis by Kris Kendall](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fwww.blackhat.com%2Fpresentations%2Fbh-dc-07%2FKendall_McMillan%2FPaper%2Fbh-dc-07-Kendall_McMillan-WP.pdf&clen=1047569&chunk=true)  
+[Structure of a Portable Executable (Graphic)](https://upload.wikimedia.org/wikipedia/commons/0/09/Portable_Executable_32_bit_Structure.png)  
+[Structure of a Portable Executable](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format?redirectedfrom=MSDN)  
+[Malwarefox.com: Classes/types of Malware](https://www.malwarefox.com/malware-types/)  
 
 ## Exercise 3.3-18: Coaxing Network IOCs
 
