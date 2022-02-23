@@ -115,7 +115,7 @@
         sc delete "GRR Monitor"  
         remove-item HKLM:\Software\GRR -force 
         remove-item c:\Windows\system32\grr -recurse -force  
-        remove-item c:\Windows\system32\grr_installr.txt -force
+        remove-item c:\Windows\system32\grr_installer.txt -force
         c:\verify.exe 
         ```
     * R3m0vedG44  
