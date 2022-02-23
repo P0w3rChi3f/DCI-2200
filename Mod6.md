@@ -117,7 +117,8 @@
         remove-item c:\Windows\system32\grr -recurse -force  
         remove-item c:\Windows\system32\grr_installer.txt -force
         c:\verify.exe 
-        ```
+    ```
+
     * R3m0vedG44  
 
 6. What source ports have been used by the CPT’s Windows 10 host?  
