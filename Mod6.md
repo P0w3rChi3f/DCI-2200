@@ -113,6 +113,7 @@
     ```Powershell
         stop-service "GRR Monitor"  
         sc delete "GRR Monitor"  
+        get-childitem c:\ -recuse -force -ErrorAction SilentlyContinue -include grr*
         remove-item HKLM:\Software\GRR -force 
         remove-item c:\Windows\system32\grr -recurse -force  
         remove-item c:\Windows\system32\grr_installer.txt -force
@@ -148,6 +149,7 @@ Note: Look for IP 172.16.12.3.  There are 12 total results, but select only from
 8. What does the above impersonation level answer represent?
     * [Impersonate - Impersonate-level COM impersonation level that allows objects to use the credentials of the caller. This is the recommended impersonation level for WMI calls.](https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventID=4624)  
     * Credentials of the caller are being used.  Similar to Single Sign-O
+    * [Impersonation levels](https://thisismyclassnotes.blogspot.com/2019/12/windows-account-logon-impersonation.html)
 
 9. How many times, before today, does the Instance ID of 4624 show up corresponding to the IP address 172.16.12.3?  
     * 61
@@ -161,3 +163,17 @@ Note: Look for IP 172.16.12.3.  There are 12 total results, but select only from
     * `dc3dd wipe=/dev/sdb pat=dac1`
     * `xxd -l 1 -s 901 /dev/sdb1`
         * c1
+
+## Mod6 Review
+
+1. Wireshark capture, Identify IP's producing network traffic
+2. Identify external IP connection
+3. How many Domain IP to external IP
+4. What Domain IP is showing up that is not document
+5. Version of WinRM
+6. Remove Agent get Code
+7. Get code from stoped services
+8. Source ports
+9. Occurance of ID
+10. Report of Recommendations
+11. Value of 320th byte  
