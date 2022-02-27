@@ -113,7 +113,7 @@
     ```Powershell
         stop-service "GRR Monitor"  
         sc delete "GRR Monitor"  
-        get-childitem c:\ -recuse -force -ErrorAction SilentlyContinue -include grr*
+        get-childitem c:\ -recurse -force -ErrorAction SilentlyContinue -include grr*
         remove-item HKLM:\Software\GRR -force 
         remove-item c:\Windows\system32\grr -recurse -force  
         remove-item c:\Windows\system32\grr_installer.txt -force
@@ -167,13 +167,23 @@ Note: Look for IP 172.16.12.3.  There are 12 total results, but select only from
 ## Mod6 Review
 
 1. Wireshark capture, Identify IP's producing network traffic
+    * Looked at Conversations
 2. Identify external IP connection
+    `!(ip.src == iprange) && (tcp.flags.syn == 1) && !(tcp.flags.ack == 1)`
 3. How many Domain IP to external IP
+    `tshark -r mypcap.pcap -Y "(ip.src == IPRange) && !(ip.dst == sameIPRange)" | awk -F" " {print $3} | sort | uniq | wc -l`
 4. What Domain IP is showing up that is not document
+    * PowerShell PingSweep
 5. Version of WinRM
+    `nmap -sV <IP> -p 5965, 5964`
 6. Remove Agent get Code
+    * Followed Proper Removal steps; Had to use cmd to execute `sc delete "GRR Monitor"`
 7. Get code from stoped services
+    `Stop-Service WinRM`
 8. Source ports
+    `(Get-WinEvent -FilterHashTable @{LogName='Security'; ID='4624'; Data='172.16.8.9'} | Select-Object -ExpandProptery Message).split("n") | Select-String -Pattern "Source Port:" | group-object -NoElement`
 9. Occurance of ID
+    `$data = get-date -year 2019 -Month 07 -day 16`
+    `get-winevent -filterhastable @{Logname="Security"; ID="5058"} | where-object {$_.TimeCreated -lt $date} | Measure`
 10. Report of Recommendations
 11. Value of 320th byte  
